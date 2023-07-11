@@ -25,15 +25,15 @@ const drawWalls = () => {
     const margin = 1;
     const wallOptions = {
         isStatic: true,
-        render: { fillStyle: 'white', strokeStyle: 'white', lineWidth: 0 },
+        render: { fillStyle: 'black', strokeStyle: 'black', lineWidth: 0.1 },
         collisionFilter: { mask: 1 }
     };
 
     return [
-        Bodies.rectangle(0, HEIGHT, WIDTH * 2, margin, wallOptions),
-        Bodies.rectangle(WIDTH, 0, margin, HEIGHT * 2, wallOptions),
-        Bodies.rectangle(0, 0, WIDTH * 2, margin, wallOptions),
-        Bodies.rectangle(0, 0, margin, HEIGHT * 2, wallOptions)
+        Bodies.rectangle(0, HEIGHT, 800, margin, wallOptions),
+        Bodies.rectangle(385, 0, margin, 600, wallOptions),
+        Bodies.rectangle(0, 0,800, margin, wallOptions),
+        Bodies.rectangle(-15, 0, margin, HEIGHT * 2, wallOptions)
     ];
 };
 
@@ -87,7 +87,7 @@ engine.gravity.y = 0;
 
 // This code sets up a Renderer to draw the particles and walls.
 const render = Render.create({
-    element: document.body,
+    element: document.getElementById('chamberView'),
     engine,
     width: WIDTH,
     height: HEIGHT,
@@ -124,10 +124,32 @@ tempControl.min = "200";
 tempControl.max = "1000";
 tempControl.value = "300";
 tempControl.addEventListener("input", function () {
+    tempControlNumber.value = this.value;
     oldTemperature = temperature;
     temperature = parseInt(this.value);
     updateSpeeds();
 });
+
+// Append the control to the document body.
+document.getElementById('temperatureSlider').appendChild(tempControl);
+
+// Controls for the simulation: a range input for adjusting the speed of particles, 
+// a reset button (though the functionality for the button is commented out), and a pause button. 
+// The pause button uses a flag (isPaused) to toggle the state of the simulation when clicked.
+const tempControlNumber = document.createElement("input");
+tempControlNumber.type = "number";
+tempControlNumber.min = "200";
+tempControlNumber.max = "1000";
+tempControlNumber.value = "300";
+tempControlNumber.addEventListener("input", function () {
+    tempControl.value = this.value;
+    oldTemperature = temperature;
+    temperature = parseInt(this.value);
+    updateSpeeds();
+});
+
+// Append the control to the document body.
+document.getElementById('temperatureNumber').appendChild(tempControlNumber);
 
 /**
  * Function to update the speed of all particles
@@ -151,12 +173,9 @@ const updateSpeeds = () => {
     }
 };
 
-// Append the control to the document body.
-document.body.appendChild(tempControl);
 
-const resetButton = document.createElement("button");
-resetButton.innerHTML = "Reset";
-document.body.appendChild(resetButton);
+
+const resetButton = document.getElementById('resetButton');
 
 resetButton.onclick = function () {
     for (let i = 0; i < particles.length; i++) {
@@ -166,11 +185,8 @@ resetButton.onclick = function () {
     particles = makeParticles();
     Composite.add(engine.world, particles);
 }
-document.body.appendChild(resetButton);
 
-
-var pauseButton = document.createElement('button');
-pauseButton.innerHTML = 'Pause';
+var pauseButton = document.getElementById('pauseButton');
 var isPaused = false;
 pauseButton.onclick = function () {
     if (!isPaused) {
@@ -186,7 +202,6 @@ pauseButton.onclick = function () {
     }
     isPaused = !isPaused;
 }
-document.body.appendChild(pauseButton);
 
 
 // This function calculates the speeds of all bodies in the world. 
@@ -205,7 +220,7 @@ function getSpeeds() {
 // and setting up the layout of the histogram.
 let svgWidth = 400;
 let svgHeight = 200;
-const svgX = d3.select("body")
+const svgX = d3.select("#particleSpeedX")
     .append("svg")
     .attr("width", svgWidth)
     .attr("height", svgHeight + 40);
@@ -235,7 +250,7 @@ svgX.append("text")
     .attr("x", svgWidth / 2)
     .attr("y", svgHeight + 35) // Position the text below the SVG element
     .attr("text-anchor", "middle")
-    .text("Particle speed on x-axis(m/s)");
+    .text("Velocidade da partícula no eixo x(m/s)");
 
 svgX.append("text")
     .attr("transform", "rotate(-90)")
@@ -243,7 +258,7 @@ svgX.append("text")
     .attr("y", 0)
     .attr("dy", "1em")
     .style("text-anchor", "middle")
-    .text("Number of Particles");
+    .text("Número de particulas");
 
 // This function takes an input velocity v, temperature T, and mass m, and returns the expected 
 // probability density for that velocity according to the Maxwell-Boltzmann distribution.
@@ -333,7 +348,7 @@ function updateHistogramX(speeds) {
 
 }
 
-const svgY = d3.select("body")
+const svgY = d3.select("#particleSpeedY")
     .append("svg")
     .attr("width", svgWidth)
     .attr("height", svgHeight + 40);
@@ -343,7 +358,7 @@ svgY.append("text")
     .attr("x", svgWidth / 2)
     .attr("y", svgHeight + 35) // Position the text below the SVG element
     .attr("text-anchor", "middle")
-    .text("Particle speed on y-axis (m/s)");
+    .text("Velocidade da partícula no eixo y (m/s)");
 
 svgY.append("text")
     .attr("transform", "rotate(-90)")
@@ -351,8 +366,7 @@ svgY.append("text")
     .attr("y", 0)
     .attr("dy", "1em")
     .style("text-anchor", "middle")
-    .text("Number of Particles");
-
+    .text("Número de particulas")
 // Add the x-axis to the plot
 svgY.append("g")
     .attr("transform", "translate(0," + svgHeight + ")")
@@ -432,7 +446,7 @@ function updateHistogramY(speeds) {
 
 }
 
-const svgTotal = d3.select("body")
+const svgTotal = d3.select("#particleSpeed")
     .append("svg")
     .attr("width", svgWidth)
     .attr("height", svgHeight + 40);
@@ -457,7 +471,7 @@ svgTotal.append("text")
     .attr("x", svgWidth / 2)
     .attr("y", svgHeight + 35) // Position the text below the SVG element
     .attr("text-anchor", "middle")
-    .text("Modular Particle speed (m/s)");
+    .text("Velocidade da partícula modular (m/s)");
 
 svgTotal.append("text")
     .attr("transform", "rotate(-90)")
@@ -465,7 +479,7 @@ svgTotal.append("text")
     .attr("y", 0)
     .attr("dy", "1em")
     .style("text-anchor", "middle")
-    .text("Number of Particles");
+    .text("Número de particulas");
 
 // Add the x-axis to the plot
 svgTotal.append("g")
@@ -546,7 +560,7 @@ function updateHistogramTotal(speeds) {
 
 }
 
-const svgCinectic = d3.select("body")
+const svgCinectic = d3.select("#kineticEnergy")
     .append("svg")
     .attr("width", svgWidth)
     .attr("height", svgHeight + 40);
@@ -571,7 +585,7 @@ svgCinectic.append("text")
     .attr("x", svgWidth / 2)
     .attr("y", svgHeight + 35) // Position the text below the SVG element
     .attr("text-anchor", "middle")
-    .text("Kinetic Energy (J) x 10^23");
+    .text("Energia cinética (J) x 10^23");
 
 svgCinectic.append("text")
     .attr("transform", "rotate(-90)")
@@ -579,7 +593,7 @@ svgCinectic.append("text")
     .attr("y", 0)
     .attr("dy", "1em")
     .style("text-anchor", "middle")
-    .text("Number of Particles");
+    .text("Número de particulas");
 
 // Add the x-axis to the plot
 svgCinectic.append("g")
@@ -629,6 +643,6 @@ function updateHistogramCinectic(speeds) {
         .attr("width", barWidth)
         .attr('height', function (d) { return d.length * 3; }) // Calculate the height from the top of the SVG element
         .attr("fill", "steelblue");
-   
+
 
 }

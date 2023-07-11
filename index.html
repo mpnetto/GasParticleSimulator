@@ -1,11 +1,88 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Simulação colisão de particulas.js</title>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.17.1/matter.min.js"></script>
-        <script src="https://d3js.org/d3.v5.min.js"></script>
-        <script src="script.js" defer></script>
-    </head>
-    <body>
-    </body>
+
+<head>
+    <title>Simulação colisão de particulas</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.17.1/matter.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <div class="ui container ">
+        <div class="ui inverted segment">
+            <div class="ui inverted secondary pointing menu">
+                <a class="item">
+                    Simulação de colisão de particulas
+                </a>
+                <div class="right menu">
+                    <a id="pauseButton" class="ui item">
+                        Parar
+                    </a>
+                    <a id="resetButton" class="ui item">
+                        Reiniciar
+                    </a>
+                    <a class="ui item">
+                        Sobre
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="ui grid ">
+            <div class="eight wide column col-6">
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="column">
+                            <h3>Câmara</h3>
+                            <div id="chamberView"></div>
+                        </div>
+                    </div>
+
+                        <div class="ui grid">
+                            <div class="row ">
+                                <div id="controls" class="ui segment column " style="width: fit-content; margin: 14px;">
+                                    <h3>Propriedades da câmara</h3>
+                                    <div class="content row" style="display: flex;">
+                                        <p>Temperatura:
+                                        <div id="temperatureSlider" style="padding-inline: 10px;padding-top: 3px;">
+                                        </div>
+                                        <div id="temperatureNumber"></div>
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                </div>
+            </div>
+            <div class="eight wide column">
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="column">
+                            <h3>Gráficos de Distribuição</h3>
+                            <div id="particleSpeedX"></div>
+                            <div id="particleSpeedY"></div>
+                            <div id="particleSpeed"></div>
+                            <div id="kineticEnergy"></div>
+                            <div class="ui">
+                                <div class="legend">
+                                  <div class="legend-line"></div>
+                                  <span class="legend-text">Distribuição de Maxwell-Boltzmann</span>
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+</body>
+
 </html>
